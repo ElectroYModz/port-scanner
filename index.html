@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Port Scanner</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body style="background-color:#414241;text-align: center;">
+    <h1 style="color:white;">Port Scanner</h1>
+    <form action="#" onsubmit="send();return false">
+        <label style="color:white;" for="ip">IP: </label><br>
+        <input style="background-color:#323332;color:white;" type="text" id="ip" name="ip"><br>
+        <label style="color:white;" for="startport">Start Port</label><br>
+        <input style="background-color:#323332;color:white;" type="number" min="0" value="80" id="startport" name="startport"><br>
+        <label style="color:white;" for="endport">End Port</label><br>
+        <input style="background-color:#323332;color:white;" type="number" min="0" value="65000" id="endport" name="endport"><br>
+        <input style="background-color:#323332;color:white;" type="submit" id="submit" value="Submit">
+    </form>
+    <br>
+    <div id="Progress"></div>
+    <div id="ports" style="background-color:#323332;color:white;height:200px;width:200px;border:1px solid #ccc;overflow:auto;text-align: center;margin:0 auto;"></div>
+    <br>
+    <footer>
+      <p style="color:white;">Made By ElectroY Modz<br>
+      <a href="https://github.com/ElectroYModz">Github</a></p>
+    </footer>
+      <script>
+        const {ipcRenderer} = require('electron');
+        function send(){
+            let ip = document.getElementById("ip").value;
+            let start = document.getElementById("startport").value;
+            let end = document.getElementById("endport").value;
+            ipcRenderer.send('input', { IP: ip, Start: start, End: end } );
+            document.getElementById("ip").value = "";
+            document.getElementById("startport").value = "80";
+            document.getElementById("endport").value = "65000";
+        }
+        ipcRenderer.on('output', (event, arg) => {
+          document.getElementById("ports").innerHTML += `<strong style="color:${arg.color};">${arg.message}</strong><br>`;
+        });
+        ipcRenderer.on('progress', (event, arg) => {
+          if(arg.color == "green"){
+            arg.color = "progress-bar-success";
+          } else if(arg.color == "blue"){
+            arg.color = "progress-bar-info";
+          } else if(arg.color == "yellow"){
+            arg.color = "progress-bar-warning";
+          } else if(arg.color == "red"){
+            arg.color = "progress-bar-danger";
+          } else arg.color = "progress-bar-success"
+          document.getElementById("Progress").innerHTML = `
+<div style="text-align: center;" class="progress">
+  <div class="${arg.color}" role="progressbar" aria-valuenow="${arg.state}" aria-valuemin="0" aria-valuemax="100" style="width: ${arg.state}%">
+  ${arg.state}%
+  </div>
+</div>
+`;
+        });
+    </script>
+  </body>
+</html>
