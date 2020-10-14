@@ -36,9 +36,7 @@
             let start = document.getElementById("startport").value;
             let end = document.getElementById("endport").value;
             ipcRenderer.send('input', { IP: ip, Start: start, End: end } );
-            document.getElementById("ip").value = "";
-            document.getElementById("startport").value = "80";
-            document.getElementById("endport").value = "65000";
+            document.getElementById("ports").innerHTML = "";
         }
         ipcRenderer.on('output', (event, arg) => {
           document.getElementById("ports").innerHTML += `<strong style="color:${arg.color};">${arg.message}</strong><br>`;
@@ -55,7 +53,7 @@
           } else arg.color = "progress-bar-success"
           document.getElementById("Progress").innerHTML = `
 <div style="text-align: center;" class="progress">
-  <div class="progress-bar ${arg.color}" role="progressbar" aria-valuenow="${arg.state}" aria-valuemin="0" aria-valuemax="100" style="width: ${arg.state}%">
+  <div class="progress-bar ${arg.color}" role="progressbar" aria-valuenow="${arg.state}" aria-valuemin="0" aria-valuemax="100" style="color:black;width: ${arg.state}%">
   ${arg.state}%
   </div>
 </div>
