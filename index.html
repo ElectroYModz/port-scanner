@@ -55,7 +55,7 @@
           } else arg.color = "progress-bar-success"
           document.getElementById("Progress").innerHTML = `
 <div style="text-align: center;" class="progress">
-  <div class="${arg.color}" role="progressbar" aria-valuenow="${arg.state}" aria-valuemin="0" aria-valuemax="100" style="width: ${arg.state}%">
+  <div class="progress-bar ${arg.color}" role="progressbar" aria-valuenow="${arg.state}" aria-valuemin="0" aria-valuemax="100" style="width: ${arg.state}%">
   ${arg.state}%
   </div>
 </div>
